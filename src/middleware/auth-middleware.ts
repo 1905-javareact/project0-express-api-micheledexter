@@ -1,4 +1,4 @@
-function expiredStatusMessage(res) {
+function statusMessage(res) {
     res.status(401).send('The incoming token has expired');
 }
 
@@ -6,7 +6,7 @@ export function authorization(authRoles: string[]) {
     return (req, res, next) => {
         let isAuth: boolean = false;
         if (!req.session.user) {
-            expiredStatusMessage(res);
+            statusMessage(res);
         }
         for (let userRole of req.session.user.roles) {
             if (authRoles.includes(userRole)) isAuth = true;
@@ -14,7 +14,7 @@ export function authorization(authRoles: string[]) {
         if (isAuth) {
             next();
         } else {
-            expiredStatusMessage(res);
+            statusMessage(res);
         }
     }
 }
@@ -23,7 +23,7 @@ export function adminAuth(req, res, next) {
     if (req.session.user && req.session.user.roles.includes('admin')) {
         next();
     } else {
-        expiredStatusMessage(res);
+        statusMessage(res);
     }
 }
 
@@ -31,6 +31,6 @@ export function financeAuth(req, res, next) {
     if (req.session.user && req.session.user.roles.includes('finance-manager')) {
         next();
     } else {
-        expiredStatusMessage(res);
+        statusMessage(res);
     }
 }
