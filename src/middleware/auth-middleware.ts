@@ -19,18 +19,18 @@ export function authorization(authRoles: string[]) {
     }
 }
 
-export function adminAuth(req, res, next) {
-    if (req.session.user && req.session.user.roles.includes('admin')) {
-        next();
-    } else {
-        statusMessage(res);
-    }
-}
+// export function adminAuth(req, res, next) {
+//     if (req.session.user && req.session.user.roles.includes('admin')) {
+//         next();
+//     } else {
+//         statusMessage(res);
+//     }
+// }
 
-export function financeAuth(req, res, next) {
-    if (req.session.user && req.session.user.roles.includes('finance-manager')) {
-        next();
-    } else {
-        statusMessage(res);
-    }
-}
+// export function financeAuth(req, res, next) {
+//     if (req.session.user && req.session.user.roles.includes('finance-manager')) {
+//         next();
+//     } else {
+//         statusMessage(res);
+//     }
+// }
