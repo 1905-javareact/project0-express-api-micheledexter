@@ -1,6 +1,8 @@
 // Must use `* as [thing]` instead of `[thing]` for some reason
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
+import userRouter from './routers/user-router';
+import reimbursementRouter from './routers/reimbursement-router';
 
 // CONSTANTS
 const PORT: number = 3000;
@@ -12,7 +14,8 @@ const app = express();
 app.use(bodyParser.json());
 
 // ROUTERS
-
+app.use('/users', userRouter);
+app.use('/reimbursements', reimbursementRouter);
 
 
 app.use('/', (req, resp) => {
