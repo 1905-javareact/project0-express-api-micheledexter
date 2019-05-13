@@ -21,8 +21,12 @@ app.use('/login', loginRouter);
 app.use('/users', userRouter);
 app.use('/reimbursements', reimbursementRouter);
 
+
+
 // Catch-all 404 (we keep this at the end)
-app.use('/', (req, res) => {res.sendStatus(404)})
+app.use('/', (req, res) => {
+    res.json(req.session);
+});
 
 // LISTEN
 app.listen(PORT, () => {
