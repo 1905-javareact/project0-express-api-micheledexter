@@ -5,6 +5,7 @@ import userRouter from './routers/user-router';
 import reimbursementRouter from './routers/reimbursement-router';
 import loginRouter from './routers/login-router';
 import { sessionMiddleware } from './middleware/session-middleware';
+import { authorization } from './middleware/auth-middleware';
 
 // CONSTANTS
 const PORT: number = 3000;

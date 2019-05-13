@@ -1,6 +1,5 @@
 function expiredStatusMessage(res) {
-    res.statusMessage = 'The incoming token has expired';
-    res.sendStatus(401);
+    res.status(401).send('The incoming token has expired');
 }
 
 export function authorization(authRoles: string[]) {
@@ -13,7 +12,7 @@ export function authorization(authRoles: string[]) {
             if (authRoles.includes(userRole)) isAuth = true;
         }
         if (isAuth) {
-            next()
+            next();
         } else {
             expiredStatusMessage(res);
         }
