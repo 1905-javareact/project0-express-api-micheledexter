@@ -1,12 +1,8 @@
-function statusMessage(res) {
-    res.status(401).send('The incoming token has expired');
-}
-
 export function authorization(authRoles: string[]) {
     return (req, res, next) => {
         let isAuth: boolean = false;
         if (!req.session.user) {
-            statusMessage(res);
+            res.status(401).send('The incoming token has expired');
         }
         let role = req.session.user.role;
         for (let userRole in role) {
@@ -17,7 +13,7 @@ export function authorization(authRoles: string[]) {
         if (isAuth) {
             next();
         } else {
-            statusMessage(res);
+            res.status(400).send('Invalid Credentials');
         }
     }
 }
