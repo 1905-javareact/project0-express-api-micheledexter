@@ -8,8 +8,11 @@ export function authorization(authRoles: string[]) {
         if (!req.session.user) {
             statusMessage(res);
         }
-        for (let userRole of req.session.user.roles) {
-            if (authRoles.includes(userRole)) isAuth = true;
+        let role = req.session.user.role;
+        for (let userRole in role) {
+            if (authRoles.includes(role[userRole])) {
+                isAuth = true;
+            }
         }
         if (isAuth) {
             next();
