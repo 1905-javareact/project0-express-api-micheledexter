@@ -1,3 +1,7 @@
+// In order to use environment variables we require 'dotenv'
+// We're doing it this way since it'll automatically locate
+// and configure all in one go, even though this is ES5 syntax.
+require('dotenv').config();
 // Must use `* as [thing]` instead of `[thing]` for some reason
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
@@ -19,11 +23,11 @@ app.use(sessionMiddleware);
 
 // ROUTERS
 app.get('/test', (req, res) => {
-    const queryText: string = 'SELECT * FROM "pirate";';
+    const queryText: string = `SELECT * FROM project0.enduser;`;
 
     pool.query(queryText)
         .then(response => res.send(response.rows))
-        .catch(err => res.sendStatus(500));
+        .catch(err => res.status(500).send(err));
 });
 app.use('/login', loginRouter);
 app.use('/users', userRouter);

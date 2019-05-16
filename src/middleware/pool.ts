@@ -2,9 +2,7 @@ const pg = require('pg');
 
 let config = {};
 
-console.log(process.env);
-
-if (process.env.RDS_USE) {
+if (process.env.RDS_USE === 'true') {
     console.log('Using RDS...');
     config = {
         user: process.env.RDS_USERNAME,
