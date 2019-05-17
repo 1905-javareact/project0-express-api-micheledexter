@@ -1,8 +1,13 @@
 import * as express from 'express';
 import { authorization } from '../middleware/auth-middleware';
 import { users } from '../state';
+import { getAllRolesService } from '../service/role.service';
 
 const router = express.Router();
+
+router.get('/test', async (req, res) => {
+    res.json(await getAllRolesService());
+});
 
 router.get('/', [authorization(['finance-manager']), (req, res) => {
     res.json(users);

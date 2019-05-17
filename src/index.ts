@@ -9,7 +9,11 @@ import userRouter from './routers/user.router';
 import reimbursementRouter from './routers/reimbursement.router';
 import loginRouter from './routers/login.router';
 import { sessionMiddleware } from './middleware/session-middleware';
-const pool = require('./middleware/pool');
+import { getAllUsersService } from './service/user.service';
+import { getAllRolesService, getRoleByIdService } from './service/role.service';
+import { Role } from './models/role';
+import { User } from './models/user';
+const pool = require('./modules/pool');
 
 // CONSTANTS
 const PORT: number = 3000;
@@ -22,18 +26,16 @@ app.use(bodyParser.json());
 app.use(sessionMiddleware);
 
 // ROUTERS
-app.get('/test', (req, res) => {
-    const queryText: string = `SELECT * FROM project0.enduser;`;
-
-    pool.query(queryText)
-        .then(response => res.send(response.rows))
-        .catch(err => res.status(500).send(err));
-});
 app.use('/login', loginRouter);
 app.use('/users', userRouter);
 app.use('/reimbursements', reimbursementRouter);
 
-
+// POOL TEST
+app.get('/test', async (req, res) => {
+    // getAllRolesService().then(roles => res.json(roles));
+    // getRoleByIdService(1).then(role => res.json(role));
+    getAllUsersService().then(users => res.json(users));
+});
 
 // Catch-all 404 (we keep this at the end)
 app.use('/', (req, res) => {
