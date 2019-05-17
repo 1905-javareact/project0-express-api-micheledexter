@@ -2,6 +2,7 @@ import { PoolClient } from 'pg';
 import { connectionPool } from '.';
 import { sqlUserToJsUser } from '../util/converter';
 import { User } from '../models/user';
+import { INTERNAL_SERVER_ERROR } from '../util/messages';
 
 export async function getAllUsers() {
     let client: PoolClient;
@@ -19,8 +20,7 @@ export async function getAllUsers() {
         }
         return list;
     } catch(err) {
-        console.log(err);
-        return 'Internal Server Error';
+        return INTERNAL_SERVER_ERROR;
     } finally {
         client && client.release();
     }
@@ -37,8 +37,7 @@ export async function getUserById(id: number) {
         let user = await sqlUserToJsUser(result.rows[0]);
         return user;
     } catch(err) {
-        console.log(err);
-        return 'Internal Server Error';
+        return INTERNAL_SERVER_ERROR;
     } finally {
         client && client.release();
     }
@@ -55,8 +54,7 @@ export async function findUserByUsernameAndPassword(username: string, password: 
         let user = await sqlUserToJsUser(result.rows[0]);
         return user;
     } catch(err) {
-        console.log(err);
-        return 'Internal Server Error';
+        return INTERNAL_SERVER_ERROR;
     } finally {
         client && client.release();
     }

@@ -2,6 +2,7 @@ import { PoolClient } from 'pg';
 import { connectionPool } from '.';
 import { sqlRoleToJsRole } from '../util/converter';
 import { Role } from '../models/role';
+import { INTERNAL_SERVER_ERROR } from '../util/messages';
 
 export async function getAllRoles() {
     let client: PoolClient;
@@ -13,8 +14,7 @@ export async function getAllRoles() {
         let result = await client.query(queryText);
         return result.rows.map(sqlRoleToJsRole);
     } catch(err) {
-        console.log(err);
-        return 'Internal Server Error';
+        return INTERNAL_SERVER_ERROR;
     } finally {
         client && client.release();
     }
@@ -30,7 +30,6 @@ export async function getRoleById(id: number) {
         let result = await client.query(queryText, [id]);
         return sqlRoleToJsRole(result.rows[0]);
     } catch(err) {
-        console.log(err);
         let blank: Role;
         return blank;
     } finally {

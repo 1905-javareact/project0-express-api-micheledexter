@@ -1,27 +1,15 @@
 import * as express from 'express';
 import { authorization } from '../middleware/auth-middleware';
-import { users } from '../state';
-import { getAllRolesService } from '../service/role.service';
+import { getAllUsersService, getUserByIdService } from '../service/user.service';
 
 const router = express.Router();
 
-router.get('/test', async (req, res) => {
-    res.json(await getAllRolesService());
-});
-
-router.get('/', [authorization(['finance-manager']), (req, res) => {
-    res.json(users);
+router.get('/', [authorization(['finance-manager']), async (req, res) => {
+    res.json(await getAllUsersService());
 }]);
 
-router.get('/:id', [authorization(['finance-manager']), (req, res) => {
-    for (let user of users) {
-        if (user.userId === parseInt(req.params.id)) res.json(user);
-    }
-    res.json({});
+router.get('/:id', [authorization(['finance-manager']), async (req, res) => {
+    res.json(await getUserByIdService(req.params.id));
 }]);
-
-// router.use('/', [authorization(['admin', 'finance-manager']), (req, res) => {
-//     res.json('It works.');
-// }]);
 
 export default router;

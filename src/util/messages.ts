@@ -1,0 +1,1 @@
+export const INTERNAL_SERVER_ERROR = 'ERROR 500: Internal Server Error';
