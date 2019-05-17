@@ -2,8 +2,8 @@ export class ReimbursementDTO {
     id: number;
     author_id: number;
     amount: number;
-    date_submitted: string;
-    date_resolved: string;
+    date_submitted: Date;
+    date_resolved: Date;
     description: string;
     resolver_id: number;
     status_id: number;
