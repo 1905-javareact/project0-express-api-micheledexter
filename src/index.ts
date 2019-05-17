@@ -9,11 +9,6 @@ import userRouter from './routers/user.router';
 import reimbursementRouter from './routers/reimbursement.router';
 import loginRouter from './routers/login.router';
 import { sessionMiddleware } from './middleware/session-middleware';
-import { getAllUsersService, getUserByIdService } from './service/user.service';
-import { getAllRolesService, getRoleByIdService } from './service/role.service';
-import { Role } from './models/role';
-import { User } from './models/user';
-const pool = require('./modules/pool');
 
 // CONSTANTS
 const PORT: number = 3000;
@@ -34,7 +29,10 @@ app.use('/reimbursements', reimbursementRouter);
 app.get('/test', async (req, res) => {
     // getAllRolesService().then(roles => res.json(roles));
     // getRoleByIdService(1).then(role => res.json(role));
-    getUserByIdService(1).then(users => res.json(users));
+    // getUserByIdService(1).then(users => res.json(users));
+    // getAllUsersService().then(users => res.json(users));
+    // res.json(await getAllUsersService());
+
 });
 
 // Catch-all 404 (we keep this at the end)

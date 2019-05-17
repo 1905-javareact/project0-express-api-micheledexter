@@ -43,3 +43,21 @@ export async function getUserById(id: number) {
         client && client.release();
     }
 }
+
+export async function findUserByUsernameAndPassword(username: string, password: string) {
+    let client: PoolClient;
+
+    try {
+        client = await connectionPool.connect();
+
+        let queryText = 'SELECT * FROM project0.users WHERE username=$1 AND user_pass=$2;'
+        let result = await client.query(queryText, [username, password]);
+        let user = await sqlUserToJsUser(result.rows[0]);
+        return user;
+    } catch(err) {
+        console.log(err);
+        return 'Internal Server Error';
+    } finally {
+        client && client.release();
+    }
+}
