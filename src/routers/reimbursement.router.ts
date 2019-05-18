@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { findReimbursementsByStatusIdService, findReimbursementsByStatusIdInDateRangeService, findReimbursementsByAuthorIdService, findReimbursementsByAuthorIdInRangeService } from '../service/reimbursement.service';
+import { findReimbursementsByStatusIdService, findReimbursementsByStatusIdInDateRangeService, findReimbursementsByAuthorIdService, findReimbursementsByAuthorIdInRangeService, createNewReimbursementService, updateReimbursementByIdService } from '../service/reimbursement.service';
 import { authorization } from '../middleware/auth-middleware';
 
 const router = express.Router();
@@ -19,6 +19,14 @@ router.get('/author/userId/:id', [authorization(['finance-manager', 'user']), as
 
 router.get('/author/userId/:id/date-submitted', [authorization(['finance-manager', 'user']), async (req, res) => {
     res.json(await findReimbursementsByAuthorIdInRangeService(req.params.id, req.query.start, req.query.end));
+}]);
+
+router.post('/', async(req, res) => {
+    res.json(await createNewReimbursementService(req.body));
+});
+
+router.patch('/', [authorization(['finance-manager']), async (req, res) => {
+    res.json(await updateReimbursementByIdService(req.body));
 }]);
 
 export default router;

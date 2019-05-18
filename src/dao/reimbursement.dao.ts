@@ -1,7 +1,10 @@
 import { PoolClient } from "pg";
 import { INTERNAL_SERVER_ERROR } from "../util/messages";
 import { connectionPool } from ".";
-import { sqlReimbursementToJsReimbursement } from "../util/converter";
+import { sqlReimbursementToJsReimbursement, epochDateToStringDate } from "../util/converter";
+import { Reimbursement } from "../models/reimbursement";
+import { getReimbursementByIdService } from "../service/reimbursement.service";
+import { debug } from "../util/debug";
 
 export async function getAllReimbursements() {
     let client: PoolClient;
@@ -13,6 +16,7 @@ export async function getAllReimbursements() {
         let result = await client.query(queryText);
         return result.rows.map(sqlReimbursementToJsReimbursement);
     } catch(err) {
+        debug(err);
         return INTERNAL_SERVER_ERROR;
     } finally {
         client && client.release();
@@ -29,6 +33,7 @@ export async function getReimbursementById(id: number) {
         let result = await client.query(queryText, [id]);
         return sqlReimbursementToJsReimbursement(result.rows[0]);
     } catch(err) {
+        debug(err);
         return INTERNAL_SERVER_ERROR;
     } finally {
         client && client.release();
@@ -45,6 +50,7 @@ export async function findReimbursementsByStatusId(id: number) {
         let result = await client.query(queryText, [id]);
         return result.rows.map(sqlReimbursementToJsReimbursement);
     } catch(err) {
+        debug(err);
         return INTERNAL_SERVER_ERROR;
     } finally {
         client && client.release();
@@ -61,6 +67,7 @@ export async function findReimbursementsByStatusIdInDateRange(id: number, start:
         let result = await client.query(queryText, [id, start, end]);
         return result.rows.map(sqlReimbursementToJsReimbursement);
     } catch(err) {
+        debug(err);
         return INTERNAL_SERVER_ERROR;
     } finally {
         client && client.release();
@@ -77,6 +84,7 @@ export async function findReimbursementsByAuthorId(id: number) {
         let result = await client.query(queryText, [id]);
         return result.rows.map(sqlReimbursementToJsReimbursement);
     } catch(err) {
+        debug(err);
         return INTERNAL_SERVER_ERROR;
     } finally {
         client && client.release();
@@ -93,6 +101,60 @@ export async function findReimbursementsByAuthorIdInRange(id: number, start: str
         let result = await client.query(queryText, [id, start, end]);
         return result.rows.map(sqlReimbursementToJsReimbursement);
     } catch(err) {
+        debug(err);
+        return INTERNAL_SERVER_ERROR;
+    } finally {
+        client && client.release();
+    }
+}
+
+export async function createNewReimbursement(reimbursement: Reimbursement) {
+    let client: PoolClient;
+
+    try {
+        client = await connectionPool.connect();
+
+        let queryText = 'INSERT INTO project0.reimbursement("author_id", "amount", "date_submitted", "date_resolved", "description", "resolver_id", "status_id", "type_id") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, author_id, amount, date_submitted, date_resolved, description, resolver_id, status_id, type_id;';
+        let author_id = reimbursement.author;
+        let amount = reimbursement.amount;
+        let date_submitted = epochDateToStringDate(reimbursement.dateSubmitted);
+        let date_resolved = epochDateToStringDate(reimbursement.dateResolved);
+        let description = reimbursement.description;
+        let resolver_id = reimbursement.resolver;
+        let status_id = reimbursement.status;
+        let type_id = reimbursement.type;
+        let result = await client.query(queryText, [author_id, amount, date_submitted, date_resolved, description, resolver_id, status_id, type_id]);
+        if (!result.rowCount) return INTERNAL_SERVER_ERROR;
+        return await getReimbursementByIdService(reimbursement.reimbursementId);
+    } catch(err) {
+        debug(err);
+        return INTERNAL_SERVER_ERROR;
+    } finally {
+        client && client.release();
+    }
+}
+
+export async function updateReimbursementById(reimbursement: Reimbursement) {
+    let client: PoolClient;
+
+    try {
+        client = await connectionPool.connect();
+
+        let queryText = 'UPDATE project0.reimbursement SET author_id=$1, amount=$2, date_submitted=$3, date_resolved=$4, description=$5, resolver_id=$6, status_id=$7, type_id=$8 WHERE id=$9 RETURNING id, author_id, amount, date_submitted, date_resolved, description, resolver_id, status_id, type_id;';
+        let id = reimbursement.reimbursementId;
+        let author_id = reimbursement.author;
+        let amount = reimbursement.amount;
+        let date_submitted = epochDateToStringDate(reimbursement.dateSubmitted);
+        let date_resolved = epochDateToStringDate(reimbursement.dateResolved);
+        let description = reimbursement.description;
+        let resolver_id = reimbursement.resolver;
+        let status_id = reimbursement.status;
+        let type_id = reimbursement.type;
+        let result = await client.query(queryText, [author_id, amount, date_submitted, date_resolved, description, resolver_id, status_id, type_id, id]);
+        if (!result.rowCount) return INTERNAL_SERVER_ERROR;
+        return sqlReimbursementToJsReimbursement(result.rows[0]);
+    } catch(err) {
+        debug(err);
         return INTERNAL_SERVER_ERROR;
     } finally {
         client && client.release();

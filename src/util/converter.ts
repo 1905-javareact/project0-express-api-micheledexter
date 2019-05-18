@@ -26,6 +26,15 @@ export async function sqlUserToJsUser(sqlUser:UserDTO): Promise<User> {
     return new User(sqlUser.id, sqlUser.username, sqlUser.user_pass, sqlUser.first_name, sqlUser.last_name, sqlUser.email, role);
 }
 
+export function epochDateToStringDate(date: number): string {
+    let fullDate = new Date(date);
+    return (fullDate.getMonth()+1) + '/' + fullDate.getDate() + '/' + fullDate.getFullYear();
+}
+
+export function stringDateToEpochDate(date: string): number {
+    return new Date(date).getTime();
+}
+
 // export async function sqlUserToJsUser(sqlUser:UserDTO): User {
 //     let assigned: Role;
 //     let userRole = await getRoleByIdService(sqlUser.role_id);

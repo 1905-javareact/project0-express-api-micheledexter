@@ -4,6 +4,7 @@ import { sqlUserToJsUser } from '../util/converter';
 import { User } from '../models/user';
 import { INTERNAL_SERVER_ERROR } from '../util/messages';
 import { getUserByIdService } from '../service/user.service';
+import { debug } from '../util/debug';
 
 export async function getAllUsers() {
     let client: PoolClient;
@@ -21,6 +22,7 @@ export async function getAllUsers() {
         }
         return list;
     } catch(err) {
+        debug(err);
         return INTERNAL_SERVER_ERROR;
     } finally {
         client && client.release();
@@ -45,7 +47,7 @@ export async function updateUserById(user: User) {
         if (!primary.rowCount) return INTERNAL_SERVER_ERROR;
         return await getUserByIdService(id);
     } catch (err) {
-        console.log(err);
+        debug(err);
         return INTERNAL_SERVER_ERROR;
     } finally {
         client && client.release();
@@ -63,6 +65,7 @@ export async function getUserById(id: number) {
         let user = await sqlUserToJsUser(result.rows[0]);
         return user;
     } catch(err) {
+        debug(err);
         return INTERNAL_SERVER_ERROR;
     } finally {
         client && client.release();
@@ -80,6 +83,7 @@ export async function findUserByUsernameAndPassword(username: string, password: 
         let user = await sqlUserToJsUser(result.rows[0]);
         return user;
     } catch(err) {
+        debug(err);
         return INTERNAL_SERVER_ERROR;
     } finally {
         client && client.release();
