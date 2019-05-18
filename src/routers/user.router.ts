@@ -4,7 +4,7 @@ import { getAllUsersService, getUserByIdService } from '../service/user.service'
 
 const router = express.Router();
 
-router.get('/', [authorization(['finance-manager']), async (req, res) => {
+router.get('/', [authorization(['admin']), async (req, res) => {
     res.json(await getAllUsersService());
 }]);
 
