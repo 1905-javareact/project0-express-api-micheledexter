@@ -1,6 +1,6 @@
 import * as express from 'express';
 import { authorization } from '../middleware/auth-middleware';
-import { getAllUsersService, getUserByIdService, updateUserByIdService } from '../service/user.service';
+import { getAllUsersService, getUserByIdService, updateUserByIdService, createUserService } from '../service/user.service';
 
 const router = express.Router();
 
@@ -14,6 +14,11 @@ router.patch('/',  async (req, res) => {
 
 router.get('/:id', [authorization(['finance-manager', 'user']), async (req, res) => {
     res.json(await getUserByIdService(req.params.id));
+}]);
+
+// TEMPORARY
+router.post('/', [authorization(['admin']), async (req, res) => {
+    res.json(await createUserService(req.body))
 }]);
 
 export default router;

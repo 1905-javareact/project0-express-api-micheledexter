@@ -2,7 +2,7 @@ import { PoolClient } from 'pg';
 import { connectionPool } from '.';
 import { sqlUserToJsUser } from '../util/converter';
 import { User } from '../models/user';
-import { INTERNAL_SERVER_ERROR } from '../util/messages';
+import { INTERNAL_SERVER_ERROR, CREATED, INVALID_CREDENTIALS } from '../util/messages';
 import { getUserByIdService } from '../service/user.service';
 import { debug } from '../util/debug';
 
@@ -78,10 +78,40 @@ export async function findUserByUsernameAndPassword(username: string, password: 
     try {
         client = await connectionPool.connect();
 
-        let queryText = 'SELECT * FROM project0.users WHERE username=$1 AND user_pass=$2;'
-        let result = await client.query(queryText, [username, password]);
-        let user = await sqlUserToJsUser(result.rows[0]);
-        return user;
+        let queryText = 'SELECT * FROM project0.users WHERE username=$1;'
+        let bcrypt = require('bcrypt');
+        let result = await client.query(queryText, [username]);
+        let hash = result.rows[0].user_pass;
+        if (bcrypt.compareSync(password, hash)) {
+            return getUserByIdService(result.rows[0].id);
+        } else {
+            return INVALID_CREDENTIALS;
+        }
+    } catch(err) {
+        debug(err);
+        return INTERNAL_SERVER_ERROR;
+    } finally {
+        client && client.release();
+    }
+}
+
+export async function createUser(user: User) {
+    let client: PoolClient;
+
+    try {
+        client = await connectionPool.connect();
+
+        let queryText = 'INSERT INTO project0.users ("username", "user_pass", "first_name", "last_name", "email", "role_id") VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, username, user_pass, first_name, last_name, email, role_id;';
+        let username = user.username;
+        let bcrypt = require('bcrypt');
+        let first_name = user.firstName;
+        let last_name = user.lastName;
+        let email = user.email;
+        let role_id = user.role.roleId;
+        bcrypt.hash(user.password, 10, async (err, hash) => {
+            await client.query(queryText, [username, hash, first_name, last_name, email, role_id]);
+        });
+        return CREATED;
     } catch(err) {
         debug(err);
         return INTERNAL_SERVER_ERROR;
