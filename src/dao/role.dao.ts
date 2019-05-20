@@ -22,6 +22,23 @@ export async function getAllRoles() {
     }
 }
 
+export async function getRolePage(page: number, pagelength?: number) {
+    let client: PoolClient;
+
+    try {
+        client = await connectionPool.connect();
+        
+        let queryText: string = `SELECT * FROM project0.page_roles($1${pagelength ? ', $2' : ''})`;
+        let result = await client.query(queryText, [page, pagelength]);
+        return result.rows.map(sqlRoleToJsRole);
+    } catch(err) {
+        debug(err);
+        return INTERNAL_SERVER_ERROR;
+    } finally {
+        client && client.release();
+    }
+}
+
 export async function getRoleById(id: number) {
     let client: PoolClient;
 
