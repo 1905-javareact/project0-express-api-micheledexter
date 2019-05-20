@@ -1,4 +1,4 @@
-import { PoolClient } from 'pg';
+import { PoolClient, QueryResult } from 'pg';
 import { connectionPool } from '.';
 import { sqlUserToJsUser } from '../util/converter';
 import { User } from '../models/user';
@@ -24,6 +24,28 @@ export async function getAllUsers() {
     } catch(err) {
         debug(err);
         return INTERNAL_SERVER_ERROR;
+    } finally {
+        client && client.release();
+    }
+}
+
+export async function getUserPage(page: number, pagelength?: number) {
+    let client: PoolClient;
+
+    try {
+        client = await connectionPool.connect();
+
+        let queryText: string = `SELECT * FROM project0.page_users($1${pagelength ? ', $2' : ''})`;
+        let result = await client.query(queryText, [page, pagelength]);
+        let promiseList = result.rows.map(sqlUserToJsUser);
+        let list: User[] = [];
+        for (let promise of promiseList) {
+            let user = await promise;
+            list.push(user);
+        }
+        return list;
+    } catch(err) {
+        debug(err);
     } finally {
         client && client.release();
     }

@@ -1,4 +1,4 @@
-import { getAllUsers, getUserById, updateUserById, createUser } from "../dao/user.dao";
+import { getAllUsers, getUserById, updateUserById, createUser, getUserPage } from "../dao/user.dao";
 import { User } from "../models/user";
 
 export async function getAllUsersService() {
@@ -15,4 +15,8 @@ export async function getUserByIdService(id: number) {
 
 export async function createUserService(user: User) {
     return await createUser(user);
+}
+
+export async function getUserPageService(page: number, pagelength?: number) {
+    return await getUserPage(page, pagelength);
 }

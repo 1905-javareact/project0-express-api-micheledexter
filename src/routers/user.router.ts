@@ -1,6 +1,6 @@
 import * as express from 'express';
 import { authorization } from '../middleware/auth-middleware';
-import { getAllUsersService, getUserByIdService, updateUserByIdService, createUserService } from '../service/user.service';
+import { getAllUsersService, getUserByIdService, updateUserByIdService, createUserService, getUserPageService } from '../service/user.service';
 
 const router = express.Router();
 
@@ -15,6 +15,17 @@ router.patch('/',  async (req, res) => {
 router.get('/:id', [authorization(['finance-manager', 'user']), async (req, res) => {
     res.json(await getUserByIdService(req.params.id));
 }]);
+
+/*
+We are going to ignore any security for paging requests FOR NOW
+because we already know it works and have shown it, but we need
+to show functionality and code and authorization takes up 
+precious time
+*/
+
+router.get('/page/:page', async (req, res) => {
+    res.json(await getUserPageService(req.params.page, req.query.pagelength));
+});
 
 // TEMPORARY
 router.post('/', [authorization(['admin']), async (req, res) => {
