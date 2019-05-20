@@ -124,7 +124,7 @@ export async function createUser(user: User) {
     try {
         client = await connectionPool.connect();
 
-        let queryText = 'INSERT INTO project0.users ("username", "user_pass", "first_name", "last_name", "email", "role_id") VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, username, user_pass, first_name, last_name, email, role_id;';
+        let queryText = 'INSERT INTO project0.users ("username", "user_pass", "first_name", "last_name", "email", "role_id") VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;';
         let username = user.username;
         let bcrypt = require('bcrypt');
         let first_name = user.firstName;

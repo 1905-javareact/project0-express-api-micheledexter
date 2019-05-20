@@ -134,7 +134,7 @@ export async function createNewReimbursement(reimbursement: Reimbursement) {
     try {
         client = await connectionPool.connect();
 
-        let queryText = 'INSERT INTO project0.reimbursement("author_id", "amount", "date_submitted", "date_resolved", "description", "resolver_id", "status_id", "type_id") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, author_id, amount, date_submitted, date_resolved, description, resolver_id, status_id, type_id;';
+        let queryText = 'INSERT INTO project0.reimbursement("author_id", "amount", "date_submitted", "date_resolved", "description", "resolver_id", "status_id", "type_id") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;';
         let author_id = reimbursement.author;
         let amount = reimbursement.amount;
         let date_submitted = epochDateToStringDate(reimbursement.dateSubmitted);
