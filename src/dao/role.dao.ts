@@ -29,7 +29,8 @@ export async function getRolePage(page: number, pagelength?: number) {
         client = await connectionPool.connect();
         
         let queryText: string = `SELECT * FROM project0.page_roles($1${pagelength ? ', $2' : ''})`;
-        let result = await client.query(queryText, [page, pagelength]);
+        let params = pagelength ? [page, pagelength] : [page];
+        let result = await client.query(queryText, params);
         return result.rows.map(sqlRoleToJsRole);
     } catch(err) {
         debug(err);

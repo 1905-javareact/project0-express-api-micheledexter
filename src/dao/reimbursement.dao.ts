@@ -23,6 +23,26 @@ export async function getAllReimbursements() {
     }
 }
 
+export async function getReimbursementPage(page: number, pagelength?: number) {
+    let client: PoolClient;
+
+    try {
+        client = await connectionPool.connect();
+
+        console.log(pagelength);
+        
+        let queryText: string = `SELECT * FROM project0.page_reimbursement($1${pagelength ? ', $2' : ''})`;
+        let params = pagelength ? [page, pagelength] : [page];
+        let result = await client.query(queryText, params);
+        return result.rows.map(sqlReimbursementToJsReimbursement);
+    } catch(err) {
+        debug(err);
+        return INTERNAL_SERVER_ERROR;
+    } finally {
+        client && client.release();
+    }
+}
+
 export async function getReimbursementById(id: number) {
     let client: PoolClient;
 

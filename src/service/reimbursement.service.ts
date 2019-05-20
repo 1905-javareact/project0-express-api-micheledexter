@@ -1,4 +1,4 @@
-import { getAllReimbursements, getReimbursementById, findReimbursementsByStatusId, findReimbursementsByStatusIdInDateRange, findReimbursementsByAuthorId, findReimbursementsByAuthorIdInRange, createNewReimbursement, updateReimbursementById } from "../dao/reimbursement.dao";
+import { getAllReimbursements, getReimbursementById, findReimbursementsByStatusId, findReimbursementsByStatusIdInDateRange, findReimbursementsByAuthorId, findReimbursementsByAuthorIdInRange, createNewReimbursement, updateReimbursementById, getReimbursementPage } from "../dao/reimbursement.dao";
 import { Reimbursement } from "../models/reimbursement";
 
 export async function getAllReimbursementsService() {
@@ -31,4 +31,8 @@ export async function createNewReimbursementService(reimbursement: Reimbursement
 
 export async function updateReimbursementByIdService(reimbursement: Reimbursement) {
     return await updateReimbursementById(reimbursement);
+}
+
+export async function getReimbursementPageService(page: number, pagelength?: number) {
+    return await getReimbursementPage(page, pagelength);
 }

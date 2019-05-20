@@ -36,7 +36,8 @@ export async function getUserPage(page: number, pagelength?: number) {
         client = await connectionPool.connect();
 
         let queryText: string = `SELECT * FROM project0.page_users($1${pagelength ? ', $2' : ''})`;
-        let result = await client.query(queryText, [page, pagelength]);
+        let params = pagelength ? [page, pagelength] : [page];
+        let result = await client.query(queryText, params);
         let promiseList = result.rows.map(sqlUserToJsUser);
         let list: User[] = [];
         for (let promise of promiseList) {

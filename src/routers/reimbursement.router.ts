@@ -1,8 +1,12 @@
 import * as express from 'express';
-import { findReimbursementsByStatusIdService, findReimbursementsByStatusIdInDateRangeService, findReimbursementsByAuthorIdService, findReimbursementsByAuthorIdInRangeService, createNewReimbursementService, updateReimbursementByIdService } from '../service/reimbursement.service';
+import { findReimbursementsByStatusIdService, findReimbursementsByStatusIdInDateRangeService, findReimbursementsByAuthorIdService, findReimbursementsByAuthorIdInRangeService, createNewReimbursementService, updateReimbursementByIdService, getReimbursementPageService } from '../service/reimbursement.service';
 import { authorization } from '../middleware/auth-middleware';
 
 const router = express.Router();
+
+router.get('/page/:page', async (req, res) => {
+    res.json(await getReimbursementPageService(req.params.page, req.query.pagelength));
+});
 
 router.get('/status/:id', [authorization(['finance-manager']), async (req, res) => {
     res.json(await findReimbursementsByStatusIdService(req.params.id));
