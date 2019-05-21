@@ -1,7 +1,7 @@
 import { PoolClient } from "pg";
 import { INTERNAL_SERVER_ERROR } from "../util/messages";
 import { connectionPool } from ".";
-import { sqlReimbursementToJsReimbursement, epochDateToStringDate } from "../util/converter";
+import { sqlReimbursementToJsReimbursement, epochDateToStringDate, jsReimbursementToSqlParams } from "../util/converter";
 import { Reimbursement } from "../models/reimbursement";
 import { getReimbursementByIdService } from "../service/reimbursement.service";
 import { debug } from "../util/debug";
@@ -135,17 +135,11 @@ export async function createNewReimbursement(reimbursement: Reimbursement) {
         client = await connectionPool.connect();
 
         let queryText = 'INSERT INTO project0.reimbursement("author_id", "amount", "date_submitted", "date_resolved", "description", "resolver_id", "status_id", "type_id") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;';
-        let author_id = reimbursement.author;
-        let amount = reimbursement.amount;
-        let date_submitted = epochDateToStringDate(reimbursement.dateSubmitted);
-        let date_resolved = epochDateToStringDate(reimbursement.dateResolved);
-        let description = reimbursement.description;
-        let resolver_id = reimbursement.resolver;
-        let status_id = reimbursement.status;
-        let type_id = reimbursement.type;
-        let result = await client.query(queryText, [author_id, amount, date_submitted, date_resolved, description, resolver_id, status_id, type_id]);
+        let params = jsReimbursementToSqlParams(reimbursement, false);
+
+        let result = await client.query(queryText, params);
         if (!result.rowCount) return INTERNAL_SERVER_ERROR;
-        return await getReimbursementByIdService(reimbursement.reimbursementId);
+        return await sqlReimbursementToJsReimbursement(result.rows[0]);
     } catch(err) {
         debug(err);
         return INTERNAL_SERVER_ERROR;
@@ -161,16 +155,9 @@ export async function updateReimbursementById(reimbursement: Reimbursement) {
         client = await connectionPool.connect();
 
         let queryText = 'UPDATE project0.reimbursement SET author_id=$1, amount=$2, date_submitted=$3, date_resolved=$4, description=$5, resolver_id=$6, status_id=$7, type_id=$8 WHERE id=$9 RETURNING id, author_id, amount, date_submitted, date_resolved, description, resolver_id, status_id, type_id;';
-        let id = reimbursement.reimbursementId;
-        let author_id = reimbursement.author;
-        let amount = reimbursement.amount;
-        let date_submitted = epochDateToStringDate(reimbursement.dateSubmitted);
-        let date_resolved = epochDateToStringDate(reimbursement.dateResolved);
-        let description = reimbursement.description;
-        let resolver_id = reimbursement.resolver;
-        let status_id = reimbursement.status;
-        let type_id = reimbursement.type;
-        let result = await client.query(queryText, [author_id, amount, date_submitted, date_resolved, description, resolver_id, status_id, type_id, id]);
+        let params = jsReimbursementToSqlParams(reimbursement, true);
+
+        let result = await client.query(queryText, params);
         if (!result.rowCount) return INTERNAL_SERVER_ERROR;
         return sqlReimbursementToJsReimbursement(result.rows[0]);
     } catch(err) {

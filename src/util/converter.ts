@@ -34,3 +34,17 @@ export function epochDateToStringDate(date: number): string {
 export function stringDateToEpochDate(date: string): number {
     return new Date(date).getTime();
 }
+
+export function jsReimbursementToSqlParams(reimbursement: Reimbursement, includeId: boolean): any[] {
+    let params: any[] = [];
+    params.push(reimbursement.author);
+    params.push(reimbursement.amount);
+    params.push(epochDateToStringDate(reimbursement.dateSubmitted));
+    params.push(epochDateToStringDate(reimbursement.dateResolved));
+    params.push(reimbursement.description);
+    params.push(reimbursement.resolver);
+    params.push(reimbursement.status);
+    params.push(reimbursement.type);
+    if (includeId) params.push(reimbursement.reimbursementId);
+    return params;
+}
