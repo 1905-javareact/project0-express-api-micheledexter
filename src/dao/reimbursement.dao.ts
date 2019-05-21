@@ -1,9 +1,8 @@
 import { PoolClient } from "pg";
 import { INTERNAL_SERVER_ERROR } from "../util/messages";
 import { connectionPool } from ".";
-import { sqlReimbursementToJsReimbursement, epochDateToStringDate, jsReimbursementToSqlParams, cleanReimbursement } from "../util/converter";
+import { sqlReimbursementToJsReimbursement, jsReimbursementToSqlParams, cleanReimbursement } from "../util/converter";
 import { Reimbursement, MessyReimbursement } from "../models/reimbursement";
-import { getReimbursementByIdService } from "../service/reimbursement.service";
 import { debug } from "../util/debug";
 
 export async function getAllReimbursements() {
