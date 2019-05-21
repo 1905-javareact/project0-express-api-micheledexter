@@ -1,8 +1,8 @@
 import { PoolClient } from "pg";
 import { INTERNAL_SERVER_ERROR } from "../util/messages";
 import { connectionPool } from ".";
-import { sqlReimbursementToJsReimbursement, epochDateToStringDate, jsReimbursementToSqlParams } from "../util/converter";
-import { Reimbursement } from "../models/reimbursement";
+import { sqlReimbursementToJsReimbursement, epochDateToStringDate, jsReimbursementToSqlParams, cleanReimbursement } from "../util/converter";
+import { Reimbursement, MessyReimbursement } from "../models/reimbursement";
 import { getReimbursementByIdService } from "../service/reimbursement.service";
 import { debug } from "../util/debug";
 
@@ -128,10 +128,11 @@ export async function findReimbursementsByAuthorIdInRange(id: number, start: str
     }
 }
 
-export async function createNewReimbursement(reimbursement: Reimbursement) {
+export async function createNewReimbursement(messyReimbursement: MessyReimbursement) {
     let client: PoolClient;
 
     try {
+        let reimbursement = cleanReimbursement(messyReimbursement);
         client = await connectionPool.connect();
 
         let queryText = 'INSERT INTO project0.reimbursement("author_id", "amount", "date_submitted", "date_resolved", "description", "resolver_id", "status_id", "type_id") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;';
@@ -148,10 +149,11 @@ export async function createNewReimbursement(reimbursement: Reimbursement) {
     }
 }
 
-export async function updateReimbursementById(reimbursement: Reimbursement) {
+export async function updateReimbursementById(messyReimbursement: MessyReimbursement) {
     let client: PoolClient;
 
     try {
+        let reimbursement = cleanReimbursement(messyReimbursement);
         client = await connectionPool.connect();
 
         let queryText = 'UPDATE project0.reimbursement SET author_id=$1, amount=$2, date_submitted=$3, date_resolved=$4, description=$5, resolver_id=$6, status_id=$7, type_id=$8 WHERE id=$9 RETURNING id, author_id, amount, date_submitted, date_resolved, description, resolver_id, status_id, type_id;';

@@ -4,7 +4,7 @@ import { UserDTO } from '../dto/user.dto';
 import { getRoleByIdService } from '../service/role.service';
 import { User } from '../models/user';
 import { ReimbursementDTO } from '../dto/reimbursement.dto';
-import { Reimbursement } from '../models/reimbursement';
+import { Reimbursement, MessyReimbursement } from '../models/reimbursement';
 
 export function sqlRoleToJsRole(sqlRole:RoleDTO): Role {
     return new Role(sqlRole.id, sqlRole.user_role);
@@ -47,4 +47,19 @@ export function jsReimbursementToSqlParams(reimbursement: Reimbursement, include
     params.push(reimbursement.type);
     if (includeId) params.push(reimbursement.reimbursementId);
     return params;
+}
+
+export function cleanReimbursement(messy: MessyReimbursement): Reimbursement {
+    const clean: Reimbursement = new Reimbursement(
+        messy.reimbursementId,
+        messy.author,
+        messy.author,
+        (typeof(messy.dateSubmitted) === 'string' ? stringDateToEpochDate(messy.dateSubmitted + '') : messy.dateSubmitted),
+        (typeof(messy.dateResolved) === 'string' ? stringDateToEpochDate(messy.dateResolved) : messy.dateResolved),
+        messy.description,
+        messy.resolver,
+        messy.status,
+        messy.type
+    );
+    return clean;
 }
