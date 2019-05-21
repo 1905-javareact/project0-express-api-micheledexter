@@ -132,7 +132,7 @@ export async function createNewReimbursement(messyReimbursement: MessyReimbursem
     let client: PoolClient;
 
     try {
-        let reimbursement = cleanReimbursement(messyReimbursement);
+        let reimbursement: Reimbursement = cleanReimbursement(messyReimbursement);
         client = await connectionPool.connect();
 
         let queryText = 'INSERT INTO project0.reimbursement("author_id", "amount", "date_submitted", "date_resolved", "description", "resolver_id", "status_id", "type_id") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;';
@@ -153,7 +153,7 @@ export async function updateReimbursementById(messyReimbursement: MessyReimburse
     let client: PoolClient;
 
     try {
-        let reimbursement = cleanReimbursement(messyReimbursement);
+        let reimbursement: Reimbursement = cleanReimbursement(messyReimbursement);
         client = await connectionPool.connect();
 
         let queryText = 'UPDATE project0.reimbursement SET author_id=$1, amount=$2, date_submitted=$3, date_resolved=$4, description=$5, resolver_id=$6, status_id=$7, type_id=$8 WHERE id=$9 RETURNING id, author_id, amount, date_submitted, date_resolved, description, resolver_id, status_id, type_id;';
