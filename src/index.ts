@@ -25,17 +25,7 @@ app.use('/login', loginRouter);
 app.use('/users', userRouter);
 app.use('/reimbursements', reimbursementRouter);
 
-// POOL TEST
-app.get('/test', async (req, res) => {
-    // getAllRolesService().then(roles => res.json(roles));
-    // getRoleByIdService(1).then(role => res.json(role));
-    // getUserByIdService(1).then(users => res.json(users));
-    // getAllUsersService().then(users => res.json(users));
-    // res.json(await getAllUsersService());
-
-});
-
-// Catch-all 404 (we keep this at the end)
+// Catch-all 400 "Bad Request" (we keep this at the end)
 app.use('/', (req, res) => {
     res.sendStatus(400);
 });
