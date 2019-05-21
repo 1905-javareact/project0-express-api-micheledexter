@@ -1,4 +1,4 @@
-import { PoolClient, QueryResult } from 'pg';
+import { PoolClient } from 'pg';
 import { connectionPool } from '.';
 import { sqlUserToJsUser } from '../util/converter';
 import { User } from '../models/user';

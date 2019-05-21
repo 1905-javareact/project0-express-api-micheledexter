@@ -1,7 +1,5 @@
 import * as express from 'express';
-import { users } from '../state';
 import { findUserByUsernameAndPassword } from '../dao/user.dao';
-
 const router = express.Router();
 
 router.post('/', async (req, res) => {
