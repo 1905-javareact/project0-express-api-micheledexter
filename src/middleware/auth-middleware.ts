@@ -3,7 +3,6 @@ import * as jwt from 'jsonwebtoken';
 export function authorization(authRoles: string[]) {
     return (req, res, next) => {
         let isAuth: boolean = false;
-        console.log(req.cookies.token);
         if (!req.cookies.token) {
             res.status(401).send('The incoming token has expired');
         } else {

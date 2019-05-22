@@ -5,14 +5,13 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
     const { username, password } = req.body;
-    req.cookies = {}
     let user = await findUserByUsernameAndPassword(username, password);
     if (typeof(user) !== 'string') {
         const token = jwt.sign({...user}, process.env.JWT_SECRET);
         res.cookie('token', token);
         res.send(user);
     } else {
-        res.status(400).send('Invalid Credentials');
+        res.status(400).clearCookie('token').send('Invalid Credentials');
     }
 });
 

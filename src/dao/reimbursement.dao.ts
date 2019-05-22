@@ -27,8 +27,6 @@ export async function getReimbursementPage(page: number, pagelength?: number) {
 
     try {
         client = await connectionPool.connect();
-
-        console.log(pagelength);
         
         let queryText: string = `SELECT * FROM project0.page_reimbursement($1${pagelength ? ', $2' : ''})`;
         let params = pagelength ? [page, pagelength] : [page];
