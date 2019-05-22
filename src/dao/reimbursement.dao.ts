@@ -80,7 +80,7 @@ export async function findReimbursementsByStatusIdInDateRange(id: number, start:
     try {
         client = await connectionPool.connect();
 
-        let queryText = "SELECT * FROM project0.reimbursement WHERE status_id=$1 AND date_submitted >= $2 AND date_submitted <= $3 ORDER BY date_submitted DESC;";
+        let queryText = "SELECT * FROM project0.reimbursement WHERE status_id=$1 AND date_submitted BETWEEN $2 AND $3 ORDER BY date_submitted DESC;";
         let result = await client.query(queryText, [id, start, end]);
         return result.rows.map(sqlReimbursementToJsReimbursement);
     } catch(err) {
@@ -114,7 +114,7 @@ export async function findReimbursementsByAuthorIdInRange(id: number, start: str
     try {
         client = await connectionPool.connect();
 
-        let queryText = 'SELECT * FROM project0.reimbursement WHERE author=$1 AND date_submitted >= $2 AND date_submitted <= $3 DESC;';
+        let queryText = 'SELECT * FROM project0.reimbursement WHERE author_id=$1 AND date_submitted BETWEEN $2 AND $3 ORDER BY date_submitted DESC;';
         let result = await client.query(queryText, [id, start, end]);
         return result.rows.map(sqlReimbursementToJsReimbursement);
     } catch(err) {
