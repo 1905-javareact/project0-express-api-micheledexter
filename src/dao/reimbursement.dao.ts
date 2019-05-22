@@ -31,6 +31,7 @@ export async function getReimbursementPage(page: number, pagelength?: number) {
         let queryText: string = `SELECT * FROM project0.page_reimbursement($1${pagelength ? ', $2' : ''})`;
         let params = pagelength ? [page, pagelength] : [page];
         let result = await client.query(queryText, params);
+        
         return result.rows.map(sqlReimbursementToJsReimbursement);
     } catch(err) {
         debug(err);
