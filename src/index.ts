@@ -9,6 +9,7 @@ import * as cookieParser from 'cookie-parser';
 import userRouter from './routers/user.router';
 import reimbursementRouter from './routers/reimbursement.router';
 import loginRouter from './routers/login.router';
+import { corsFilter } from './middleware/cors-filter.middleware';
 
 // CONSTANTS
 const PORT: number = 3000;
@@ -19,6 +20,7 @@ const app = express();
 // MIDDLEWARE
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(corsFilter);
 
 // ROUTERS
 app.use('/login', loginRouter);
