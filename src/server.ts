@@ -12,7 +12,7 @@ import loginRouter from './routers/login.router';
 import { corsFilter } from './middleware/cors-filter.middleware';
 
 // CONSTANTS
-const PORT: number = 3000;
+const PORT: number = parseInt(process.env.SERVER_PORT);
 
 // SERVER INSTANCE
 const app = express();

@@ -16,8 +16,8 @@ if (env.RDS_USE === 'true') {
         host: env.RDS_HOSTNAME,
         database: env.RDS_DATABASE,
         password: env.RDS_PASSWORD,
-        port: parseInt(env.RDS_PORT),
-        max: parseInt(env.RDS_MAX)
+        port: 5432,
+        max: 5
     };
 } else {
     console.log('Using Development...');
@@ -26,8 +26,8 @@ if (env.RDS_USE === 'true') {
         host: env.DEVEL_HOSTNAME,
         database: env.DEVEL_DATABASE,
         password: env.DEVEL_PASSWORD,
-        port: parseInt(env.DEVEL_PORT),
-        max: parseInt(env.DEVEL_MAX)
+        port: 5432,
+        max: 5
     }
 }
 export const connectionPool = new Pool(config);
