@@ -3,9 +3,9 @@
 // and configure all in one go, even though this is ES5 syntax.
 require('dotenv').config();
 // Must use `* as [thing]` instead of `[thing]` for some reason
-import * as express from 'express';
-import * as bodyParser from 'body-parser';
-import * as cookieParser from 'cookie-parser';
+import express from 'express';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import userRouter from './routers/user.router';
 import reimbursementRouter from './routers/reimbursement.router';
 import loginRouter from './routers/login.router';

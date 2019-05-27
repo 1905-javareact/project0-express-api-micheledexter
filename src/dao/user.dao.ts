@@ -48,6 +48,7 @@ export async function getUserPage(page: number, pagelength?: number) {
         return list;
     } catch(err) {
         debug(err);
+        return INTERNAL_SERVER_ERROR;
     } finally {
         client && client.release();
     }
