@@ -29,7 +29,7 @@ app.use('/reimbursements', reimbursementRouter);
 
 // REMOVE COOKIE (presentation only)
 app.use('/del', (req, res) => {
-    res.clearCookie('token').json('Cookie Deleted');
+    res.clearCookie('token', {path: '/'}).json('Cookie Deleted');
 });
 
 // Catch-all 400 "Bad Request" (we keep this at the end)

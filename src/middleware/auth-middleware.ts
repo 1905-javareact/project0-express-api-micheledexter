@@ -6,6 +6,7 @@ export function authorization(authRoles: string[]) {
         if (!req.cookies.token) {
             res.status(401).send('The incoming token has expired');
         } else {
+            res.cookie('token', req.cookies.token, { expires: new Date(Date.now() + 3600000) });
             let user = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
             let role = user['role'];
             let userId = user['userId'];
@@ -19,7 +20,7 @@ export function authorization(authRoles: string[]) {
             if (isAuth) {
                 next();
             } else {
-                res.status(400).send('Invalid Credentials');
+                res.status(403).send('Invalid Credentials');
             }
         }
     }

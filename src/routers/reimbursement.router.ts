@@ -8,20 +8,20 @@ router.get('/page/:page', async (req, res) => {
     res.json(await getReimbursementPageService(req.params.page, req.query.pagelength));
 });
 
-router.get('/status/:id', [authorization(['finance-manager']), async (req, res) => {
+router.get('/status/:id', [authorization(['admin','finance-manager']), async (req, res) => {
     res.json(await findReimbursementsByStatusIdService(req.params.id));
 }]);
 
-router.get('/status/:id/date-submitted', [authorization(['finance-manager']), async (req, res) => {
+router.get('/status/:id/date-submitted', [authorization(['admin', 'finance-manager']), async (req, res) => {
     res.json(await findReimbursementsByStatusIdInDateRangeService(req.params.id, req.query.start, req.query.end));
     // res.json(`Look at that, #${req.params.id}, it works! The start is ${new Date(req.query.start).getTime()} and the end is ${new Date(req.query.end).getTime()}`);
 }]);
 
-router.get('/author/userId/:id', [authorization(['finance-manager', 'user']), async (req, res) => {
+router.get('/author/userId/:id', [authorization(['admin', 'finance-manager', 'user']), async (req, res) => {
     res.json(await findReimbursementsByAuthorIdService(req.params.id));
 }]);
 
-router.get('/author/userId/:id/date-submitted', [authorization(['finance-manager', 'user']), async (req, res) => {
+router.get('/author/userId/:id/date-submitted', [authorization(['admin', 'finance-manager', 'user']), async (req, res) => {
     res.json(await findReimbursementsByAuthorIdInRangeService(req.params.id, req.query.start, req.query.end));
 }]);
 
@@ -29,7 +29,7 @@ router.post('/', async(req, res) => {
     res.json(await createNewReimbursementService(req.body));
 });
 
-router.patch('/', [authorization(['finance-manager']), async (req, res) => {
+router.patch('/', [authorization(['admin', 'finance-manager']), async (req, res) => {
     res.json(await updateReimbursementByIdService(req.body));
 }]);
 

@@ -8,7 +8,9 @@ router.post('/', async (req, res) => {
     let user = await findUserByUsernameAndPassword(username, password);
     if (typeof(user) !== 'string') {
         const token = jwt.sign({...user}, process.env.JWT_SECRET);
-        res.cookie('token', token);
+        res.cookie('token', token, { expires: new Date(Date.now() + 900000)});
+        res.cookie('user', user, { expires: new Date(Date.now() + 900000)})
+        // res.cookie('token', token);
         res.send(user);
     } else {
         res.status(400).clearCookie('token').send('Invalid Credentials');

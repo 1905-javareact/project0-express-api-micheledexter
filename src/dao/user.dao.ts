@@ -13,7 +13,7 @@ export async function getAllUsers() {
     try {
         client = await connectionPool.connect();
 
-        let queryText = `SELECT * FROM ${schema()}.users;`;
+        let queryText = `SELECT * FROM ${schema()}.users ORDER BY id;`;
         let result = await client.query(queryText);
         let promiseList = await result.rows.map(sqlUserToJsUser);
         let list: User[] = [];

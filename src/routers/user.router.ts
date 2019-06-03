@@ -4,7 +4,7 @@ import { getAllUsersService, getUserByIdService, updateUserByIdService, createUs
 
 const router = express.Router();
 
-router.get('/', [authorization(['finance-manager']), async (req, res) => {
+router.get('/', [authorization(['admin', 'finance-manager']), async (req, res) => {
     res.json(await getAllUsersService());
 }]);
 
@@ -12,7 +12,7 @@ router.patch('/', [authorization(['admin']), async (req, res) => {
     res.json(await updateUserByIdService(req.body));
 }]);
 
-router.get('/:id', [authorization(['finance-manager', 'user']), async (req, res) => {
+router.get('/:id', [authorization(['admin','finance-manager', 'user']), async (req, res) => {
     res.json(await getUserByIdService(req.params.id));
 }]);
 
