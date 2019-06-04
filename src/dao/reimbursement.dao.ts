@@ -48,7 +48,7 @@ export async function getReimbursementById(id: number) {
     try {
         client = await connectionPool.connect();
         
-        let queryText = `SELECT * FROM ${schema()}.reimbursement WHERE id=$1;`;
+        let queryText = `SELECT * FROM ${schema()}.reimbursement WHERE id=$1 ORDER BY date_submitted DESC;`;
         let result = await client.query(queryText, [id]);
         return sqlReimbursementToJsReimbursement(result.rows[0]);
     } catch(err) {
@@ -65,7 +65,7 @@ export async function findReimbursementsByStatusId(id: number) {
     try {
         client = await connectionPool.connect();
 
-        let queryText = `SELECT * FROM ${schema()}.reimbursement WHERE status_id=$1 ORDER BY date_submitted ASC;`;
+        let queryText = `SELECT * FROM ${schema()}.reimbursement WHERE status_id=$1 ORDER BY date_submitted DESC;`;
         let result = await client.query(queryText, [id]);
         return result.rows.map(sqlReimbursementToJsReimbursement);
     } catch(err) {
