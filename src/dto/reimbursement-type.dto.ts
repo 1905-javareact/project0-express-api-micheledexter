@@ -1,4 +1,4 @@
 export class ReimbursementTypeDTO {
-  typeId: number;
-  type: string;
+  id: number;
+  re_type: string;
 }

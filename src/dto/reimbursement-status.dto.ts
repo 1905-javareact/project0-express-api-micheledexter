@@ -1,4 +1,4 @@
 export class ReimbursementStatusDTO {
-  statusId: number;
+  id: number;
   status: string;
 }

@@ -11,7 +11,7 @@ export async function getAllReimbursementTypes() {
   try {
     client = await connectionPool.connect();
 
-    let queryText = `SELECT * FROM ${schema()}.reimbursement_type ORDERY BY id;`;
+    let queryText = `SELECT * FROM ${schema()}.reimbursement_type ORDER BY id;`;
     let result = await client.query(queryText);
     return result.rows.map(sqlReimbursementTypeToJsReimbursementType);
   } catch(err) {

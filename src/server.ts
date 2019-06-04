@@ -28,7 +28,7 @@ app.use(corsFilter);
 app.use('/login', loginRouter);
 app.use('/users', userRouter);
 app.use('/reimbursements', reimbursementRouter);
-app.use('/reimbursement-types', reimbursementTypeRouter);
+app.use('/reimbursement-type', reimbursementTypeRouter);
 app.use('/reimbursement-status', reimbursementStatusRouter);
 
 // REMOVE COOKIE (presentation only)

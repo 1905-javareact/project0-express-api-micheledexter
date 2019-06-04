@@ -19,11 +19,11 @@ export function sqlReimbursementToJsReimbursement(sqlReimbursement: Reimbursemen
 }
 
 export function sqlReimbursementTypeToJsReimbursementType(sqlReimbursementType: ReimbursementTypeDTO): ReimbursementType {
-    return new ReimbursementType(sqlReimbursementType.typeId, sqlReimbursementType.type);
+    return new ReimbursementType(sqlReimbursementType.id, sqlReimbursementType.re_type);
 }
 
 export function sqlReimbursementStatusToJsReimbursementStatus(sqlReimbursementStatus: ReimbursementStatusDTO): ReimbursementStatus {
-    return new ReimbursementStatus(sqlReimbursementStatus.statusId, sqlReimbursementStatus.status);
+    return new ReimbursementStatus(sqlReimbursementStatus.id, sqlReimbursementStatus.status);
 }
 
 export async function sqlUserToJsUserSupport(role_id): Promise<Role> {
