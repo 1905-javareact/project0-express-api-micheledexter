@@ -4,7 +4,9 @@ import { UserDTO } from '../dto/user.dto';
 import { getRoleByIdService } from '../service/role.service';
 import { User } from '../models/user';
 import { ReimbursementDTO } from '../dto/reimbursement.dto';
-import { Reimbursement, MessyReimbursement } from '../models/reimbursement';
+import { Reimbursement, MessyReimbursement, ReimbursementType, ReimbursementStatus } from '../models/reimbursement';
+import { ReimbursementTypeDTO } from '../dto/reimbursement-type.dto';
+import { ReimbursementStatusDTO } from '../dto/reimbursement-status.dto';
 
 export function sqlRoleToJsRole(sqlRole:RoleDTO): Role {
     return new Role(sqlRole.id, sqlRole.user_role);
@@ -14,6 +16,14 @@ export function sqlReimbursementToJsReimbursement(sqlReimbursement: Reimbursemen
     let submitted: number = sqlReimbursement.date_submitted.getTime();
     let resolved: number = sqlReimbursement.date_resolved ? sqlReimbursement.date_resolved.getTime() : -1;
     return new Reimbursement(sqlReimbursement.id, sqlReimbursement.author_id, sqlReimbursement.amount, submitted, resolved, sqlReimbursement.description, sqlReimbursement.resolver_id, sqlReimbursement.status_id, sqlReimbursement.type_id);
+}
+
+export function sqlReimbursementTypeToJsReimbursementType(sqlReimbursementType: ReimbursementTypeDTO): ReimbursementType {
+    return new ReimbursementType(sqlReimbursementType.typeId, sqlReimbursementType.type);
+}
+
+export function sqlReimbursementStatusToJsReimbursementStatus(sqlReimbursementStatus: ReimbursementStatusDTO): ReimbursementStatus {
+    return new ReimbursementStatus(sqlReimbursementStatus.statusId, sqlReimbursementStatus.status);
 }
 
 export async function sqlUserToJsUserSupport(role_id): Promise<Role> {

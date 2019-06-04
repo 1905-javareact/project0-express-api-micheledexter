@@ -12,7 +12,7 @@ export async function getAllReimbursements() {
     try {
         client = await connectionPool.connect();
 
-        let queryText = 'SELECT * FROM project0.reimbursement;';
+        let queryText = `SELECT * FROM ${schema()}.reimbursement ORDER BY id;`;
         let result = await client.query(queryText);
         return result.rows.map(sqlReimbursementToJsReimbursement);
     } catch(err) {
@@ -116,7 +116,7 @@ export async function findReimbursementsByAuthorIdInRange(id: number, start: str
     try {
         client = await connectionPool.connect();
 
-        let queryText = `SELECT * FROM ${schema()}.reimbursement WHERE author=$1 AND date_submitted >= $2 AND date_submitted <= $3 DESC;`;
+        let queryText = `SELECT * FROM ${schema()}.reimbursement WHERE author=$1 AND date_submitted >= $2 AND date_submitted <= $3 ORDER BY date_submitted DESC;`;
         let result = await client.query(queryText, [id, start, end]);
         return result.rows.map(sqlReimbursementToJsReimbursement);
     } catch(err) {
@@ -155,7 +155,7 @@ export async function updateReimbursementById(messyReimbursement: MessyReimburse
         let reimbursement: Reimbursement = cleanReimbursement(messyReimbursement);
         client = await connectionPool.connect();
 
-        let queryText = `UPDATE ${schema()}.reimbursement SET author_id=$1, amount=$2, date_submitted=$3, date_resolved=$4, description=$5, resolver_id=$6, status_id=$7, type_id=$8 WHERE id=$9 RETURNING id, author_id, amount, date_submitted, date_resolved, description, resolver_id, status_id, type_id;`;
+        let queryText = `UPDATE ${schema()}.reimbursement SET author_id=$1, amount=$2, date_submitted=$3, date_resolved=$4, description=$5, resolver_id=$6, status_id=$7, type_id=$8 WHERE id=$9 RETURNING *;`;
         let params = jsReimbursementToSqlParams(reimbursement, true);
 
         let result = await client.query(queryText, params);

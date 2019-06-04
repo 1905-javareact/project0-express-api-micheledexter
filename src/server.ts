@@ -8,6 +8,8 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import userRouter from './routers/user.router';
 import reimbursementRouter from './routers/reimbursement.router';
+import reimbursementTypeRouter from './routers/reimbursement-type.router';
+import reimbursementStatusRouter from './routers/reimbursement-status.router';
 import loginRouter from './routers/login.router';
 import { corsFilter } from './middleware/cors-filter.middleware';
 
@@ -26,10 +28,16 @@ app.use(corsFilter);
 app.use('/login', loginRouter);
 app.use('/users', userRouter);
 app.use('/reimbursements', reimbursementRouter);
+app.use('/reimbursement-types', reimbursementTypeRouter);
+app.use('/reimbursement-status', reimbursementStatusRouter);
 
 // REMOVE COOKIE (presentation only)
 app.use('/del', (req, res) => {
-    res.clearCookie('token', {path: '/'}).json('Cookie Deleted');
+    res.cookie('token', req.cookies.token, { expires: new Date(Date.now() + 0) });
+    res.cookie('user', req.cookies.user, { expires: new Date(Date.now() + 0) });
+    res.clearCookie('user');
+    res.clearCookie('token', {path: '/'});
+    res.json('Deleted Cookies');
 });
 
 // Catch-all 400 "Bad Request" (we keep this at the end)
