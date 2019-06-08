@@ -63,7 +63,7 @@ export function cleanReimbursement(messy: MessyReimbursement): Reimbursement {
     const clean: Reimbursement = new Reimbursement(
         messy.reimbursementId,
         messy.author,
-        messy.author,
+        messy.amount,
         (typeof(messy.dateSubmitted) === 'string' ? stringDateToEpochDate(messy.dateSubmitted + '') : messy.dateSubmitted),
         (typeof(messy.dateResolved) === 'string' ? stringDateToEpochDate(messy.dateResolved) : messy.dateResolved),
         messy.description,
