@@ -48,6 +48,7 @@ export function stringDateToEpochDate(date: string): number {
 export function jsReimbursementToSqlParams(reimbursement: Reimbursement, includeId: boolean): any[] {
     let params: any[] = [];
     params.push(reimbursement.author);
+    
     params.push(reimbursement.amount);
     params.push(epochDateToStringDate(reimbursement.dateSubmitted));
     params.push(epochDateToStringDate(reimbursement.dateResolved));
